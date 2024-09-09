@@ -1,4 +1,4 @@
-### CRUD BOOK NEXTJS SQLITE
+### CRUD BOOK NEXTJS POSTGRESQL
 
 ## Getting Started
 
@@ -10,7 +10,7 @@ npm install
 
 ```
 
-2. copy .env.example as .env and configure your sqlite DATABASE_URL
+2. copy .env.example as .env and configure your postgresql DATABASE_URL
 
 ```bash
 # in windows

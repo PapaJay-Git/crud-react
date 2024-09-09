@@ -149,8 +149,8 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <div>
-        <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
         <Title>EDIT BOOK</Title>
+        <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
         <form onSubmit={handleSubmit} className='tracking-widest text-base font-semibold'>
             <div className='flex flex-wrap gap-3 mb-5'>
                 {Object.entries(inputFields).map(([key, field]) => (

@@ -81,9 +81,8 @@ const BooksPage = () => {
 
   return (
     <div className='bg-inherit'>
-      <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
       <Title>MY BOOK COLLECTION</Title>
-
+      <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
       <Link href="/books/create" className='btn font-bold tracking-widest'>CREATE</Link>
       <div className="mt-5 border p-3 tracking-widest overflow-x-auto">
         <table className="table table-lg">

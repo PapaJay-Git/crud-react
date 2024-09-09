@@ -36,7 +36,7 @@ const Alert: React.FC<NotificationType> = ({ message, type, showAlert, setShowAl
     }[type];
   
     return (showAlert &&
-      <div role="alert" className={`mt-10 alert`}>
+      <div role="alert" className={`my-5 alert`}>
         <SvgComponent />
         <span>{message}</span>
       </div>

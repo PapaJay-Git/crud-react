@@ -2,7 +2,31 @@
 
 ## Getting Started
 
-First, run the development server:
+1. install the dependencies:
+
+```bash
+
+npm install
+
+```
+
+2. copy .env.example as .env and configure your mysql DATABASE_URL
+
+```bash
+# in windows
+copy .env.example .env
+
+```
+
+3. Migrate Prisma on your database
+
+
+```bash
+npx prisma migrate dev
+
+```
+
+4. Run your development
 
 ```bash
 npm run dev

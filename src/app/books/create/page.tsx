@@ -1,6 +1,6 @@
 'use client'; 
 
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import Link from 'next/link';
 import Alert from '@/components/Alert';
 import Title from '@/components/Title';
@@ -74,35 +74,35 @@ export default function CreateBookPage() {
       label: 'Title',
       type: 'text',
       value: title,
-      onChange: (e) => setTitle(e.target.value),
+      onChange: (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value),
       required: true,
     },
     author: {
       label: 'Author',
       type: 'text',
       value: author,
-      onChange: (e) => setAuthor(e.target.value),
+      onChange: (e: ChangeEvent<HTMLInputElement>) => setAuthor(e.target.value),
       required: true,
     },
     ISBN: {
       label: 'ISBN',
       type: 'text',
       value: ISBN,
-      onChange: (e) => setISBN(e.target.value),
+      onChange: (e: ChangeEvent<HTMLInputElement>) => setISBN(e.target.value),
       required: true,
     },
     publishedDate: {
       label: 'Published Date',
       type: 'date',
       value: publishedDate,
-      onChange: (e) => setPublishedDate(e.target.value),
+      onChange: (e: ChangeEvent<HTMLInputElement>) => setPublishedDate(e.target.value),
       required: true,
     },
     genre: {
       label: 'Genre',
       type: 'text',
       value: genre,
-      onChange: (e) => setGenre(e.target.value),
+      onChange: (e: ChangeEvent<HTMLInputElement>) => setGenre(e.target.value),
       required: true,
     }
   }
@@ -111,6 +111,7 @@ export default function CreateBookPage() {
     <div >
         <Title>MY BOOK COLLECTION</Title>
         <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
+
         <form onSubmit={handleSubmit} className='tracking-widest text-base font-semibold'>
             <div className='flex flex-wrap gap-3 mb-5'>
             {Object.entries(inputFields).map(([key, field]) => (

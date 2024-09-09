@@ -35,5 +35,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-
+# ENV
 .env
+
+# Prisma files
+prisma/dev.db
+prisma/migrations/
+
+# SQLite database file
+dev.db
+dev.db-journal

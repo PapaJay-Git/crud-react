@@ -84,7 +84,7 @@ const BooksPage = () => {
       <Title>MY BOOK COLLECTION</Title>
       <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
       <Link href="/books/create" className='btn font-bold tracking-widest'>CREATE</Link>
-      <div className="mt-5 border p-3 tracking-widest overflow-x-auto">
+      <div className="mt-5 border p-3 tracking-widest overflow-x-auto px-2 md:px-0 pb-10">
         <table className="table table-lg">
           <thead className=' text-black font-bold text-base py-3'>
             <tr>

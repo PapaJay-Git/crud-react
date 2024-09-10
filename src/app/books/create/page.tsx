@@ -109,7 +109,7 @@ export default function CreateBookPage() {
 
   return (
     <div >
-        <Title>MY BOOK COLLECTION</Title>
+        <Title>CREATE BOOK</Title>
         <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
 
         <form onSubmit={handleSubmit} className='tracking-widest text-base font-semibold px-2 md:px-0 pb-10'>

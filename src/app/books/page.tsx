@@ -18,7 +18,7 @@ type Book = {
 
 const BooksPage = () => {
   const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState<Boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<'success' | 'error' | 'warning'>('success');

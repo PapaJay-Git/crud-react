@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { bookSchema }  from '@/schemas/bookSchema';
 import dateFormat from '@/lib/dateFormat';
+import { formatZodErrors } from '@/lib/formatZodErrors';
 
 export async function GET() {
   try {
@@ -24,7 +25,10 @@ export async function POST(request: Request) {
 
     const parseResult = bookSchema.safeParse({ title, author, ISBN, publishedDate, genre });
     if (!parseResult.success) {
-      return NextResponse.json({ error: parseResult.error.format() }, { status: 400 });
+      const formatedZodErrors = formatZodErrors(parseResult.error);
+    
+      console.log(formatedZodErrors);
+      return NextResponse.json(formatedZodErrors, { status: 400 });
     }
 
     const formattedDate = new Date(publishedDate).toISOString();

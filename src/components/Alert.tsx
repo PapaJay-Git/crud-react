@@ -5,13 +5,13 @@ import { useEffect } from "react";
 
 
 interface NotificationType {
-    message: string | null;
+    alertMessage: string | null;
     type: 'warning' | 'success' | 'error';
-    showAlert: Boolean;
-    setShowAlert: React.Dispatch<React.SetStateAction<Boolean>>;
+    showAlert: boolean;
+    setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
   }
   
-const Alert: React.FC<NotificationType> = ({ message, type, showAlert, setShowAlert }) => {
+const Alert: React.FC<NotificationType> = ({ alertMessage, type, showAlert, setShowAlert }) => {
 
     useEffect(() => {
         if (showAlert) {
@@ -38,7 +38,7 @@ const Alert: React.FC<NotificationType> = ({ message, type, showAlert, setShowAl
     return (showAlert &&
       <div role="alert" className={`my-5 alert`}>
         <SvgComponent />
-        <span>{message}</span>
+        <span>{alertMessage}</span>
       </div>
     );
   };

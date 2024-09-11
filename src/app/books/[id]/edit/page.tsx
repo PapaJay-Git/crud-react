@@ -9,18 +9,18 @@ import Loading from '@/components/Loading';
 
 const EditBookPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const [title, setTitle] = useState<string | null>(null);
-  const [author, setAuthor] = useState<string | null>(null);
-  const [ISBN, setISBN] = useState<string | null>(null);
-  const [publishedDate, setPublishedDate] = useState<string | null>(null);
-  const [genre, setGenre] = useState<string | null>(null);
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [ISBN, setISBN] = useState('');
+  const [publishedDate, setPublishedDate] = useState('');
+  const [genre, setGenre] = useState('');
   const [loading, setLoading] = useState(true);
   const [notfound, setNotfound] = useState(false);
   const [isUpdating, setisUpdating] = useState(false);
 
-  const [showAlert, setShowAlert] = useState<Boolean>(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<'success' | 'error' | 'warning'>('success');
-  const [alertMessage, setShowMessage] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchBook() {
@@ -36,17 +36,17 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
           return;
         }
 
-        setTitle(data.title);
-        setAuthor(data.author);
-        setISBN(data.ISBN);
-        setPublishedDate(data.publishedDate);
-        setGenre(data.genre);
+        setTitle(data.title || '');
+        setAuthor(data.author || '');
+        setISBN(data.ISBN || '');
+        setPublishedDate(data.publishedDate || '');
+        setGenre(data.genre || '');
 
       } catch (error) {
         setNotfound(true);
         setShowAlert(true);
         setAlertType('error');
-        setShowMessage('Failed fetching book.');
+        setAlertMessage('Failed fetching book.');
         
       } finally {
         setLoading(false);
@@ -55,6 +55,60 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
 
     fetchBook();
   }, [id]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (notfound) {
+    return <div>Book not found</div>;
+  }
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!confirm('Are you sure you want to update this book?')) {
+        return false;
+    }
+
+    setisUpdating(true);
+ 
+
+    const updatedBook = {
+      title: title || '',
+      author: author || '',
+      ISBN: ISBN || '',
+      publishedDate: publishedDate || '',
+      genre: genre || '',
+    };
+
+    try {
+      const response = await fetch(`/api/books/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedBook),
+      });
+
+      if (response.ok) {
+        setShowAlert(true);
+        setAlertType('success');
+        setAlertMessage('Book updated successfully!');
+      } else {
+        const result = await response.json();
+        setShowAlert(true);
+        setAlertType('warning');
+        setAlertMessage(result.errorMessage || 'An error occurred');
+      }
+    } catch (error) {
+        setShowAlert(true);
+        setAlertType('error');
+        setAlertMessage("Error updating book");
+    }
+    setisUpdating(false);
+  };
+
 
   const inputFields = {
     title: {
@@ -94,63 +148,10 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
     },
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (!confirm('Are you sure you want to update this book?')) {
-        return false;
-    }
-
-    setisUpdating(true);
- 
-
-    const updatedBook = {
-      title: title || '',
-      author: author || '',
-      ISBN: ISBN || '',
-      publishedDate: publishedDate || '',
-      genre: genre || '',
-    };
-
-    try {
-      const response = await fetch(`/api/books/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedBook),
-      });
-
-      if (response.ok) {
-        setShowAlert(true);
-        setAlertType('success');
-        setShowMessage('Book updated successfully!');
-      } else {
-        const result = await response.json();
-        setShowAlert(true);
-        setAlertType('warning');
-        setShowMessage(result.message);
-      }
-    } catch (error) {
-        setShowAlert(true);
-        setAlertType('error');
-        setShowMessage("Error updating book");
-    }
-    setisUpdating(false);
-  };
-
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (notfound) {
-    return <div>Book not found</div>;
-  }
-
   return (
     <div>
         <Title>EDIT BOOK</Title>
-        <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
+        <Alert type={alertType} alertMessage={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
         <form onSubmit={handleSubmit} className='tracking-widest text-base font-semibold px-2 md:px-0 pb-10'>
             <div className='flex flex-wrap gap-3 mb-5'>
                 {Object.entries(inputFields).map(([key, field]) => (

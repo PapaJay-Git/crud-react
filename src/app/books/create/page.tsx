@@ -12,9 +12,9 @@ export default function CreateBookPage() {
   const [ISBN, setISBN] = useState('');
   const [publishedDate, setPublishedDate] = useState('');
   const [genre, setGenre] = useState('');
-  const [showAlert, setShowAlert] = useState<Boolean>(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<'success' | 'error' | 'warning'>('success');
-  const [alertMessage, setShowMessage] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   
   const [isCreating, setIsCreating] = useState(false);
@@ -54,17 +54,17 @@ export default function CreateBookPage() {
 
         setShowAlert(true);
         setAlertType('success');
-        setShowMessage('Book created successfully!');
+        setAlertMessage('Book created successfully!');
       } else {
         const result = await response.json();
         setShowAlert(true);
         setAlertType('warning');
-        setShowMessage(result.message);
+        setAlertMessage(result.errorMessage || 'An error occurred');
       }
     } catch (error) {
         setShowAlert(true);
         setAlertType('error');
-        setShowMessage("Error creating book");
+        setAlertMessage('Failed fetching book.');
     }
     setIsCreating(false);
   };
@@ -110,7 +110,7 @@ export default function CreateBookPage() {
   return (
     <div >
         <Title>MY BOOK COLLECTION</Title>
-        <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
+        <Alert type={alertType} alertMessage={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
 
         <form onSubmit={handleSubmit} className='tracking-widest text-base font-semibold px-2 md:px-0 pb-10'>
             <div className='flex flex-wrap gap-3 mb-5'>

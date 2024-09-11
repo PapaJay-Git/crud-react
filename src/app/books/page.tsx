@@ -20,9 +20,9 @@ const BooksPage = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<Boolean>(true);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [showAlert, setShowAlert] = useState<Boolean>(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<'success' | 'error' | 'warning'>('success');
-  const [alertMessage, setShowMessage] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
 
   async function fetchBooks() {
@@ -36,7 +36,7 @@ const BooksPage = () => {
     } catch (error) {
       setShowAlert(true);
       setAlertType('error');
-      setShowMessage('Error fetching books');
+      setAlertMessage('Error fetching books');
     } finally {
       setLoading(false);
     }
@@ -57,17 +57,17 @@ const BooksPage = () => {
         if (response.ok) {
           setShowAlert(true);
           setAlertType('success');
-          setShowMessage('Book deleted successfully');
+          setAlertMessage('Book deleted successfully');
           fetchBooks();
         } else {
           setShowAlert(true);
           setAlertType('error');
-          setShowMessage('Deletion Failed');
+          setAlertMessage('An error occurred');
         }
       } catch (error) {
         setShowAlert(true);
         setAlertType('error');
-        setShowMessage('Deletion Failed');
+        setAlertMessage('Deletion Failed');
       } finally {
         setIsDeleting(false);
       }
@@ -82,9 +82,9 @@ const BooksPage = () => {
   return (
     <div className='bg-inherit'>
       <Title>MY BOOK COLLECTION</Title>
-      <Alert type={alertType} message={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
-      <Link href="/books/create" className='btn font-bold tracking-widest'>CREATE</Link>
-      <div className="mt-5 border p-3 tracking-widest overflow-x-auto px-2 md:px-0 pb-10">
+      <Alert type={alertType} alertMessage={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
+      <Link href="/books/create" className='btn font-bold tracking-widest mx-1 md:mx-0'>CREATE</Link>
+      <div className="mt-5 border p-3 tracking-widest overflow-x-auto mx-1 md:mx-0 pb-10">
         <table className="table table-lg">
           <thead className=' text-black font-bold text-base py-3'>
             <tr>

@@ -5,6 +5,12 @@ import Link from 'next/link';
 import Alert from '@/components/Alert';
 import Title from '@/components/Title';
 
+type AlertType = {
+  show: boolean;
+  type: 'success' | 'error' | 'warning';
+  message: string | null;
+};
+
 export default function CreateBookPage() {
 
   const [title, setTitle] = useState('');
@@ -12,9 +18,7 @@ export default function CreateBookPage() {
   const [ISBN, setISBN] = useState('');
   const [publishedDate, setPublishedDate] = useState('');
   const [genre, setGenre] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<'success' | 'error' | 'warning'>('success');
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [alertData, setAlertData] = useState<AlertType>({ show: false, type: 'success', message: null });
 
   
   const [isCreating, setIsCreating] = useState(false);
@@ -52,19 +56,13 @@ export default function CreateBookPage() {
         setPublishedDate('');
         setGenre('');
 
-        setShowAlert(true);
-        setAlertType('success');
-        setAlertMessage('Book created successfully!');
+        setAlertData({ show: true, type: 'success', message: 'Book created successfully!' })
       } else {
         const result = await response.json();
-        setShowAlert(true);
-        setAlertType('warning');
-        setAlertMessage(result.errorMessage || 'An error occurred');
+        setAlertData({ show: true, type: 'warning', message: result.errorMessage || 'An error occurred' })
       }
     } catch (error) {
-        setShowAlert(true);
-        setAlertType('error');
-        setAlertMessage('Failed fetching book.');
+        setAlertData({ show: true, type: 'error', message: 'An unexpected error occurred' })
     }
     setIsCreating(false);
   };
@@ -110,7 +108,7 @@ export default function CreateBookPage() {
   return (
     <div >
         <Title>CREATE BOOK</Title>
-        <Alert type={alertType} alertMessage={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
+        <Alert alertData={alertData} setAlertData={setAlertData} />
 
         <form onSubmit={handleSubmit} className='tracking-widest text-base font-semibold px-2 md:px-0 pb-10'>
             <div className='flex flex-wrap gap-3 mb-5'>

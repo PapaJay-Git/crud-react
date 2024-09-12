@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { bookSchema }  from '@/schemas/bookSchema';
 import dateFormat from '@/lib/dateFormat';
@@ -15,11 +15,11 @@ export async function GET() {
     return NextResponse.json(transformedBooks);
   } catch (error) {
     console.error('Error fetching books:', error);
-    return NextResponse.json({ error: 'Failed to fetch books' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch book. Please try again later.' }, { status: 500 });
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const { title, author, ISBN, publishedDate, genre } = await request.json();
 
@@ -40,6 +40,6 @@ export async function POST(request: Request) {
     return NextResponse.json(newBook, { status: 201 });
   } catch (error) {
     console.error('Error creating books:', error);
-    return NextResponse.json({ error: 'Failed to create book' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to create book. Please try again later.' }, { status: 500 });
   }
 }

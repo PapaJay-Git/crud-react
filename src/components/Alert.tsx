@@ -1,44 +1,52 @@
 import SuccessSVG from "./SuccessSVG";
 import ErrorSVG from "./ErrorSVG";
 import WarningSVG from "./WarningSVG";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
+type AlertType = {
+  show: boolean;
+  type: 'success' | 'error' | 'warning';
+  message: string | null;
+};
 
-interface NotificationType {
-    alertMessage: string | null;
-    type: 'warning' | 'success' | 'error';
-    showAlert: boolean;
-    setShowAlert: React.Dispatch<React.SetStateAction<boolean>>;
+type NotificationType = {
+    alertData: AlertType,
+    setAlertData: React.Dispatch<React.SetStateAction<AlertType>>;
   }
   
-const Alert: React.FC<NotificationType> = ({ alertMessage, type, showAlert, setShowAlert }) => {
+const Alert: React.FC<NotificationType> = ({ alertData, setAlertData }) => {
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-        if (showAlert) {
-          const timer = setTimeout(() => {
-            setShowAlert(false);
-          }, 4000);
-    
-          return () => clearTimeout(timer);
-        } 
-      }, [showAlert]);
+      if (alertData.show) {
+        if(timerRef.current){
+          clearTimeout(timerRef.current);
+        }
 
-    const alertClass = {
-      warning: 'alert-warning',
-      success: 'alert-success',
-      error: 'alert-error'
-    }[type];
-  
+        timerRef.current = setTimeout(() => {
+          setAlertData(prevState => ({...prevState, show: false}));
+        }, 5000);
+      }
+
+      return () => {
+        if(timerRef.current){
+          clearTimeout(timerRef.current);
+        }
+      }
+    }, [alertData]);
+
     const SvgComponent  = {
       warning: WarningSVG,
       success: SuccessSVG,
       error: ErrorSVG
-    }[type];
+    }[alertData.type];
   
-    return (showAlert &&
-      <div role="alert" className={`my-5 alert`}>
+    if (!alertData.show || !alertData.message) return null;
+
+    return (
+      <div role="alert" className="my-5 alert">
         <SvgComponent />
-        <span>{alertMessage}</span>
+        <span>{alertData.message}</span>
       </div>
     );
   };

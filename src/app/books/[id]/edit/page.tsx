@@ -7,6 +7,12 @@ import Title from '@/components/Title';
 import Loading from '@/components/Loading';
 
 
+type AlertType = {
+  show: boolean;
+  type: 'success' | 'error' | 'warning';
+  message: string | null;
+};
+
 const EditBookPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const [title, setTitle] = useState('');
@@ -18,9 +24,7 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
   const [notfound, setNotfound] = useState(false);
   const [isUpdating, setisUpdating] = useState(false);
 
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<'success' | 'error' | 'warning'>('success');
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [alertData, setAlertData] = useState<AlertType>({ show: false, type: 'success', message: null });
 
   useEffect(() => {
     async function fetchBook() {
@@ -44,9 +48,7 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
 
       } catch (error) {
         setNotfound(true);
-        setShowAlert(true);
-        setAlertType('error');
-        setAlertMessage('Failed fetching book.');
+        setAlertData({ show: true, type: 'error', message: 'An unexpected error occurred' })
         
       } finally {
         setLoading(false);
@@ -92,19 +94,13 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
       });
 
       if (response.ok) {
-        setShowAlert(true);
-        setAlertType('success');
-        setAlertMessage('Book updated successfully!');
+        setAlertData({ show: true, type: 'success', message: 'Book updated successfully!' })
       } else {
         const result = await response.json();
-        setShowAlert(true);
-        setAlertType('warning');
-        setAlertMessage(result.errorMessage || 'An error occurred');
+        setAlertData({ show: true, type: 'warning', message: result.errorMessage || 'An error occurred' })
       }
     } catch (error) {
-        setShowAlert(true);
-        setAlertType('error');
-        setAlertMessage("Error updating book");
+        setAlertData({ show: true, type: 'error', message: 'An unexpected error occurred' })
     }
     setisUpdating(false);
   };
@@ -151,7 +147,7 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
   return (
     <div>
         <Title>EDIT BOOK</Title>
-        <Alert type={alertType} alertMessage={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
+        <Alert alertData={alertData} setAlertData={setAlertData} />
         <form onSubmit={handleSubmit} className='tracking-widest text-base font-semibold px-2 md:px-0 pb-10'>
             <div className='flex flex-wrap gap-3 mb-5'>
                 {Object.entries(inputFields).map(([key, field]) => (

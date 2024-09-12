@@ -16,14 +16,17 @@ type Book = {
   genre: string;
 };
 
+type AlertType = {
+  show: boolean;
+  type: 'success' | 'error' | 'warning';
+  message: string | null;
+};
+
 const BooksPage = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<'success' | 'error' | 'warning'>('success');
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
-
+  const [alertData, setAlertData] = useState<AlertType>({ show: false, type: 'success', message: null });
 
   async function fetchBooks() {
     try {
@@ -34,9 +37,7 @@ const BooksPage = () => {
       const data = await response.json();
       setBooks(data);
     } catch (error) {
-      setShowAlert(true);
-      setAlertType('error');
-      setAlertMessage('Error fetching books');
+      setAlertData({ show: true, type: 'error', message: 'An unexpected error occurred' });
     } finally {
       setLoading(false);
     }
@@ -50,24 +51,19 @@ const BooksPage = () => {
     if (confirm('Are you sure you want to delete this book?')) {
       setIsDeleting(true);
       try {
-        const response = await fetch(`/api/books/${id}`, {
+        const response = await fetch(`/api/books/1`, {
           method: 'DELETE',
         });
 
         if (response.ok) {
-          setShowAlert(true);
-          setAlertType('success');
-          setAlertMessage('Book deleted successfully');
+          setAlertData({ show: true, type: 'success', message: 'Book deleted successfully' });
           fetchBooks();
         } else {
-          setShowAlert(true);
-          setAlertType('error');
-          setAlertMessage('An error occurred');
+          const result = await response.json();
+          setAlertData({ show: true, type: 'warning', message: result.error || 'An error occurred' })
         }
       } catch (error) {
-        setShowAlert(true);
-        setAlertType('error');
-        setAlertMessage('Deletion Failed');
+        setAlertData({ show: true, type: 'error', message: 'An unexpected error occurred' });
       } finally {
         setIsDeleting(false);
       }
@@ -82,7 +78,7 @@ const BooksPage = () => {
   return (
     <div className='bg-inherit'>
       <Title>MY BOOK COLLECTION</Title>
-      <Alert type={alertType} alertMessage={alertMessage} showAlert={showAlert} setShowAlert={setShowAlert} />
+      <Alert alertData={alertData} setAlertData={setAlertData} />
       <Link href="/books/create" className='btn font-bold tracking-widest mx-1 md:mx-0'>CREATE</Link>
       <div className="mt-5 border p-3 tracking-widest overflow-x-auto mx-1 md:mx-0 pb-10">
         <table className="table table-lg">

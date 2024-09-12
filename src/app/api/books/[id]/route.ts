@@ -1,15 +1,14 @@
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import dateFormat from '@/lib/dateFormat';
 import { bookSchema } from '@/schemas/bookSchema';
 import { formatZodErrors } from '@/lib/formatZodErrors';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try{
-    const { id } = params;
     const book = await prisma.book.findUnique({
-      where: { id: parseInt(id) }, 
+      where: { id: parseInt(params.id) }, 
     });
   
     if (!book) {
@@ -23,11 +22,11 @@ export async function GET(request: Request, { params }: { params: { id: string }
   
     return NextResponse.json(transformedBook);
   }catch(error){
-    return NextResponse.json({ error: 'Error fetching book' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch book. Please try again later.' }, { status: 500 });
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     try{
         const { title, author, ISBN, publishedDate, genre } = await request.json();
 
@@ -48,17 +47,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         return NextResponse.json(updatedBook);
       }catch(error){
         console.log(error);
-        return NextResponse.json({ error: 'Error updating book' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to update book. Please try again later.' }, { status: 500 });
       }
 }
 
-export async function DELETE(reuqest: Request, { params }: { params: { id: string } }) {
+export async function DELETE(reuqest: NextRequest, { params }: { params: { id: string } }) {
     try{
         await prisma.book.delete({ where: { id: parseInt(params.id) } });
         return NextResponse.json({ message: 'Book deleted' });
       }catch(error){
         console.log(error);
-        return NextResponse.json({ error: 'Error deleting book' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to delete book. Please try again later.' }, { status: 500 });
       }
       
 }

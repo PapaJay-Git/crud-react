@@ -4,23 +4,17 @@ import { useState, ChangeEvent } from 'react';
 import Link from 'next/link';
 import Alert from '@/components/Alert';
 import Title from '@/components/Title';
-
-type AlertType = {
-  show: boolean;
-  type: 'success' | 'error' | 'warning';
-  message: string | null;
-};
+import { AlertType } from '@/types/types';
 
 export default function CreateBookPage() {
 
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [ISBN, setISBN] = useState('');
-  const [publishedDate, setPublishedDate] = useState('');
-  const [genre, setGenre] = useState('');
+  const [title, setTitle] = useState<string>('');
+  const [author, setAuthor] = useState<string>('');
+  const [ISBN, setISBN] = useState<string>('');
+  const [publishedDate, setPublishedDate] = useState<string>('');
+  const [genre, setGenre] = useState<string>('');
   const [alertData, setAlertData] = useState<AlertType>({ show: false, type: 'success', message: null });
 
-  
   const [isCreating, setIsCreating] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -32,13 +26,7 @@ export default function CreateBookPage() {
 
     setIsCreating(true);
     
-    const bookData = {
-      title,
-      author,
-      ISBN,
-      publishedDate,
-      genre,
-    };
+    const bookData = { title, author, ISBN, publishedDate, genre };
 
     try {
       const response = await fetch('/api/books', {

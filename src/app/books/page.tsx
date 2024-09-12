@@ -6,24 +6,10 @@ import Link from 'next/link';
 import Alert from '@/components/Alert';
 import Title from '@/components/Title';
 import Loading from '@/components/Loading';
-
-type Book = {
-  id: number;
-  title: string;
-  author: string;
-  ISBN: string;
-  publishedDate: string;
-  genre: string;
-};
-
-type AlertType = {
-  show: boolean;
-  type: 'success' | 'error' | 'warning';
-  message: string | null;
-};
+import { AlertType, BookType } from '@/types/types';
 
 const BooksPage = () => {
-  const [books, setBooks] = useState<Book[]>([]);
+  const [books, setBooks] = useState<BookType[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [alertData, setAlertData] = useState<AlertType>({ show: false, type: 'success', message: null });
@@ -51,7 +37,7 @@ const BooksPage = () => {
     if (confirm('Are you sure you want to delete this book?')) {
       setIsDeleting(true);
       try {
-        const response = await fetch(`/api/books/1`, {
+        const response = await fetch(`/api/books/${id}`, {
           method: 'DELETE',
         });
 

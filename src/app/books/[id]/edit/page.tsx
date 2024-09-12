@@ -5,21 +5,15 @@ import Link from 'next/link';
 import Alert from '@/components/Alert';
 import Title from '@/components/Title';
 import Loading from '@/components/Loading';
-
-
-type AlertType = {
-  show: boolean;
-  type: 'success' | 'error' | 'warning';
-  message: string | null;
-};
+import { AlertType } from '@/types/types';
 
 const EditBookPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [ISBN, setISBN] = useState('');
-  const [publishedDate, setPublishedDate] = useState('');
-  const [genre, setGenre] = useState('');
+  const [title, setTitle] = useState<string>('');
+  const [author, setAuthor] = useState<string>('');
+  const [ISBN, setISBN] = useState<string>('');
+  const [publishedDate, setPublishedDate] = useState<string>('');
+  const [genre, setGenre] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [notfound, setNotfound] = useState(false);
   const [isUpdating, setisUpdating] = useState(false);
@@ -74,15 +68,8 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
     }
 
     setisUpdating(true);
- 
 
-    const updatedBook = {
-      title: title || '',
-      author: author || '',
-      ISBN: ISBN || '',
-      publishedDate: publishedDate || '',
-      genre: genre || '',
-    };
+    const updatedBook = { title, author, ISBN, publishedDate, genre };
 
     try {
       const response = await fetch(`/api/books/${id}`, {
@@ -110,35 +97,35 @@ const EditBookPage = ({ params }: { params: { id: string } }) => {
     title: {
       label: 'Title',
       type: 'text',
-      value: title || '',
+      value: title,
       onChange: (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value),
       required: true,
     },
     author: {
       label: 'Author',
       type: 'text',
-      value: author || '',
+      value: author,
       onChange: (e: ChangeEvent<HTMLInputElement>) => setAuthor(e.target.value),
       required: true,
     },
     ISBN: {
       label: 'ISBN',
       type: 'text',
-      value: ISBN || '',
+      value: ISBN,
       onChange: (e: ChangeEvent<HTMLInputElement>) => setISBN(e.target.value),
       required: true,
     },
     publishedDate: {
       label: 'Published Date',
       type: 'date',
-      value: publishedDate || '',
+      value: publishedDate,
       onChange: (e: ChangeEvent<HTMLInputElement>) => setPublishedDate(e.target.value),
       required: true,
     },
     genre: {
       label: 'Genre',
       type: 'text',
-      value: genre || '',
+      value: genre,
       onChange: (e: ChangeEvent<HTMLInputElement>) => setGenre(e.target.value),
       required: true,
     },

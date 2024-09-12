@@ -2,12 +2,7 @@ import SuccessSVG from "./SuccessSVG";
 import ErrorSVG from "./ErrorSVG";
 import WarningSVG from "./WarningSVG";
 import { useEffect, useRef } from "react";
-
-type AlertType = {
-  show: boolean;
-  type: 'success' | 'error' | 'warning';
-  message: string | null;
-};
+import { AlertType } from "@/types/types";
 
 type NotificationType = {
     alertData: AlertType,
